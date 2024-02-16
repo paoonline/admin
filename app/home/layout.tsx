@@ -1,17 +1,18 @@
 import { Box } from "@mui/material";
-import AuthModule from "./_components/Auth/Auth";
 
-export default function Home() {
+function Layout({ children }: {children: React.ReactNode}) {
   return (
     <Box
       sx={{
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-        height:"100%"
+        height: "100%",
+        p: 2
       }}
     >
-      <AuthModule />
+      {children}
     </Box>
   );
 }
+
+export default Layout
