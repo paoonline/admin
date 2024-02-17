@@ -1,10 +1,10 @@
 "use client";
 
-import { Box, IconButton, Tab, Tabs } from "@mui/material";
+import { Alert, Box, IconButton, Snackbar, Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";
 import DashboardTable from "../DataTable/DataTable";
 import ClearIcon from "@mui/icons-material/Clear";
-import { SET_TABLE } from "@/features/table";
+import { EDIT_TABLE, SET_TABLE } from "@/features/table";
 import { ITableState } from "@/models/table.type";
 import { useDispatch } from "react-redux";
 import Configuration from "../Configuration/Configuration";
@@ -45,6 +45,7 @@ export default function DashboardModule() {
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
   const [editData, setEditData] = useState<ITableState>();
+  const [openStatusModal, setOpenStatusModal] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,6 +60,16 @@ export default function DashboardModule() {
     setValue(0);
     setEditData(undefined);
   };
+
+  const handleOpenStatusModal = (open: boolean) => {
+    setOpenStatusModal(open)
+  }
+
+  const handleEditConfig = (data:ITableState) => {
+    dispatch(EDIT_TABLE(data));
+    handleClearEditData()
+    handleOpenStatusModal(true)
+  }
 
 
   // init call
@@ -94,8 +105,19 @@ export default function DashboardModule() {
         <DashboardTable onEdit={handleEditData} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Configuration form={editData} onClear={handleClearEditData} />
+        <Configuration form={editData} onEdit={handleEditConfig}/>
       </CustomTabPanel>
+
+      <Snackbar anchorOrigin={{vertical: 'top', horizontal:'center'}} open={openStatusModal} autoHideDuration={6000} onClose={() => handleOpenStatusModal(false)}>
+        <Alert
+          onClose={() => handleOpenStatusModal(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          This is a success
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
