@@ -33,7 +33,7 @@ export default function DataTable({ onEdit }: IDataTableProps) {
               onClick={() => handleNotification()}
             />
             <CreateIcon
-              className="cursor-pointer ml-4 hover:text-sky-700"
+              className="cursor-pointer ml-6 hover:text-sky-700"
               onClick={() => handleManageConfig(e.row)}
             />
           </Box>

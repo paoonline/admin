@@ -23,6 +23,13 @@ const rows: ITableState[] = [
     temperature: 35,
     stock_thresholds: 1,
   },
+  {
+    id: "2",
+    uptime: "Snow",
+    current_sales: "Jon",
+    temperature: 35,
+    stock_thresholds: 1,
+  },
 ];
 
 function CustomTabPanel(props: TabPanelProps) {

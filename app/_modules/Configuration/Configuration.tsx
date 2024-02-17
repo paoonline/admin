@@ -1,7 +1,6 @@
 import { ITableState } from "@/models/table.type";
 import { Box, Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
 export default function Configuration({
   onEdit,
@@ -10,7 +9,6 @@ export default function Configuration({
   form?: ITableState;
   onEdit(data:ITableState): void;
 }) {
-  const dispatch = useDispatch();
 
   const {
     register,
