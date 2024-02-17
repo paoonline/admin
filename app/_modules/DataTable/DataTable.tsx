@@ -3,7 +3,7 @@ import { ITableState } from "@/models/table.type";
 import { searchArray } from "@/utils";
 import CreateIcon from "@mui/icons-material/Create";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, debounce } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +16,8 @@ export default function DataTable({ onEdit }: IDataTableProps) {
     { field: "id", headerName: "ID", width: 50 },
     { field: "uptime", headerName: "Uptime", width: 130 },
     { field: "current_sales", headerName: "Current sales", width: 130 },
+    { field: "temperature", headerName: "Temperature", width: 130 },
+    { field: "stock_thresholds", headerName: "Stock thresholds", width: 130 },
     {
       field: "notification_edit",
       headerName: "Notification / Update configuration",
@@ -57,6 +59,8 @@ export default function DataTable({ onEdit }: IDataTableProps) {
     setTableData(searchResult);
   };
 
+  const debouncedOnChange = debounce(handleSearch, 500);
+
   useEffect(() => {
     setTableData(tableSelector);
   }, [tableSelector]);
@@ -72,7 +76,7 @@ export default function DataTable({ onEdit }: IDataTableProps) {
           id="search-table"
           label="Search"
           variant="outlined"
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => debouncedOnChange(e.target.value)}
         />
       </Box>
 

@@ -7,6 +7,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { SET_TABLE } from "@/features/table";
 import { ITableState } from "@/models/table.type";
 import { useDispatch } from "react-redux";
+import Configuration from "../Configuration/Configuration";
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -15,7 +17,7 @@ interface TabPanelProps {
 
 const rows: ITableState[] = [
   {
-    id: "a",
+    id: "1",
     uptime: "Snow",
     current_sales: "Jon",
     temperature: 35,
@@ -58,6 +60,7 @@ export default function DashboardModule() {
     setEditData(undefined);
   };
 
+
   // init call
   useEffect(() => {
     dispatch(SET_TABLE(rows));
@@ -73,13 +76,11 @@ export default function DashboardModule() {
           aria-label="basic tabs example"
         >
           <Tab label={<span>Dashboard</span>} />
-
           {!!editData && (
             <Tab
               label={
                 <Box flexDirection={"row"}>
                   <span>Configuration</span>
-
                   <IconButton size="small" onClick={handleClearEditData}>
                     <ClearIcon className="cursor-pointer hover:text-sky-700" />
                   </IconButton>
@@ -92,7 +93,9 @@ export default function DashboardModule() {
       <CustomTabPanel value={value} index={0}>
         <DashboardTable onEdit={handleEditData} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}></CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <Configuration form={editData} onClear={handleClearEditData} />
+      </CustomTabPanel>
     </Box>
   );
 }
