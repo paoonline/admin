@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import AuthModule from "./_components/Auth/Auth";
+import AuthModule from "./_modules/Auth/Auth";
 
 export default function Home() {
   return (

@@ -1,5 +1,4 @@
-'use client'
-import Dashboard from "../_components/Dashboard/Dashboard";
+import Dashboard from "../_modules/Dashboard/Dashboard";
 
 export default function Home() {
   return (
