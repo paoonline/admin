@@ -1,4 +1,5 @@
 import { ITableState } from "@/models/table.type";
+import ApiClient from "@/services/api-client";
 import { Box, Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 
@@ -7,7 +8,7 @@ export default function Configuration({
   form,
 }: {
   form?: ITableState;
-  onEdit(data: ITableState): void;
+  onEdit(data: ITableState, isError?: boolean): void;
 }) {
   const {
     register,
@@ -17,8 +18,15 @@ export default function Configuration({
     defaultValues: form,
   });
 
+  const apiClient = new ApiClient();
   const onSubmit = handleSubmit((data) => {
-    onEdit(data);
+    try {
+      apiClient.SERVICES.PUT_DASHBOARD(data).then((res) => {
+        onEdit(data);
+      });
+    } catch (error) {
+      onEdit(data, true);
+    }
   });
 
   return (

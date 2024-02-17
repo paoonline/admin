@@ -66,10 +66,14 @@ export default function DashboardModule() {
     setOpenStatusErrorModal(open);
   };
 
-  const handleEditConfig = (data: ITableState) => {
+  const handleEditConfig = (data: ITableState, isError: boolean) => {
     dispatch(EDIT_TABLE(data));
     handleClearEditData();
-    handleOpenStatusModal(true);
+    if(isError) {
+      handleOpenStatusErrorModal(true)
+    } else {
+      handleOpenStatusModal(true);
+    }
   };
 
   // init call
