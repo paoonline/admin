@@ -7,9 +7,8 @@ export default function Configuration({
   form,
 }: {
   form?: ITableState;
-  onEdit(data:ITableState): void;
+  onEdit(data: ITableState): void;
 }) {
-
   const {
     register,
     formState: { errors },
@@ -19,7 +18,7 @@ export default function Configuration({
   });
 
   const onSubmit = handleSubmit((data) => {
-    onEdit(data)
+    onEdit(data);
   });
 
   return (
@@ -35,6 +34,11 @@ export default function Configuration({
             <Box sx={{ width: 200 }}>{key}</Box>
 
             <TextField
+              type={
+                key === "temperature" || key === "stock_thresholds"
+                  ? "number"
+                  : "text"
+              }
               disabled={key === "id"}
               sx={{ width: "100%" }}
               {...register(key as keyof ITableState, { required: true })}

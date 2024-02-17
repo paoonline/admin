@@ -1,36 +1,23 @@
 "use client";
 
-import { Alert, Box, IconButton, Snackbar, Tab, Tabs } from "@mui/material";
-import { useEffect, useState } from "react";
-import DashboardTable from "../DataTable/DataTable";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Loading } from "@/app/_components/Loading/Loading";
+import ErrorSnackbar from "@/app/_components/Snackbar/Error";
+import SuccessSnackbar from "@/app/_components/Snackbar/Success";
 import { EDIT_TABLE, SET_TABLE } from "@/features/table";
 import { ITableState } from "@/models/table.type";
+import ApiClient from "@/services/api-client";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Box, IconButton, Tab, Tabs } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Configuration from "../Configuration/Configuration";
+import DashboardTable from "../DataTable/DataTable";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
-
-const rows: ITableState[] = [
-  {
-    id: "1",
-    uptime: "Snow",
-    current_sales: "Jon",
-    temperature: 35,
-    stock_thresholds: 1,
-  },
-  {
-    id: "2",
-    uptime: "Snow",
-    current_sales: "Jon",
-    temperature: 35,
-    stock_thresholds: 1,
-  },
-];
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -53,6 +40,9 @@ export default function DashboardModule() {
   const dispatch = useDispatch();
   const [editData, setEditData] = useState<ITableState>();
   const [openStatusModal, setOpenStatusModal] = useState(false);
+  const [openStatusErrorModal, setOpenStatusErrorModal] = useState(false);
+  const apiClient = new ApiClient();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -69,24 +59,34 @@ export default function DashboardModule() {
   };
 
   const handleOpenStatusModal = (open: boolean) => {
-    setOpenStatusModal(open)
-  }
+    setOpenStatusModal(open);
+  };
 
-  const handleEditConfig = (data:ITableState) => {
+  const handleOpenStatusErrorModal = (open: boolean) => {
+    setOpenStatusErrorModal(open);
+  };
+
+  const handleEditConfig = (data: ITableState) => {
     dispatch(EDIT_TABLE(data));
-    handleClearEditData()
-    handleOpenStatusModal(true)
-  }
-
+    handleClearEditData();
+    handleOpenStatusModal(true);
+  };
 
   // init call
   useEffect(() => {
-    dispatch(SET_TABLE(rows));
+    try {
+      apiClient.SERVICES.GET_DASHBOARD().then((res) => {
+        dispatch(SET_TABLE(res));
+      });
+    } catch (error) {
+      handleOpenStatusErrorModal(true)
+    }
+    setIsLoading(false);
   }, []);
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* <Loading /> */}
+      {isLoading && <Loading />}
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
@@ -112,19 +112,18 @@ export default function DashboardModule() {
         <DashboardTable onEdit={handleEditData} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Configuration form={editData} onEdit={handleEditConfig}/>
+        <Configuration form={editData} onEdit={handleEditConfig} />
       </CustomTabPanel>
 
-      <Snackbar anchorOrigin={{vertical: 'top', horizontal:'center'}} open={openStatusModal} autoHideDuration={6000} onClose={() => handleOpenStatusModal(false)}>
-        <Alert
-          onClose={() => handleOpenStatusModal(false)}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          This is a success
-        </Alert>
-      </Snackbar>
+      <SuccessSnackbar
+        open={openStatusModal}
+        onClose={() => handleOpenStatusModal(false)}
+      />
+
+      <ErrorSnackbar
+        open={openStatusErrorModal}
+        onClose={() => handleOpenStatusErrorModal(false)}
+      />
     </Box>
   );
 }
