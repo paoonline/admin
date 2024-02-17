@@ -2,17 +2,17 @@
   "dashboard": [
     {
       "id": "1",
-      "uptime": "Snow123",
+      "uptime": "Snow1232",
       "current_sales": "Jon",
       "temperature": 35,
-      "stock_thresholds": 1
+      "stock_thresholds": "3"
     },
     {
       "id": "2",
-      "uptime": "Snow12",
+      "uptime": "test",
       "current_sales": "Jon222",
       "temperature": 35,
-      "stock_thresholds": 1
+      "stock_thresholds": "1222"
     }
   ]
 }
