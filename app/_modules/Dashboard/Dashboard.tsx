@@ -35,13 +35,7 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-const createObjectInit = {
-  id: new Date().getTime().toString(),
-  uptime: "",
-  current_sales: "",
-  temperature: 0,
-  stock_thresholds: 0,
-} as ITableState;
+
 
 export default function DashboardModule() {
   const [value, setValue] = useState(0);
@@ -54,6 +48,14 @@ export default function DashboardModule() {
   const apiClient = new ApiClient();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const createObjectInit = {
+    id: new Date().getTime().toString(),
+    uptime: "",
+    current_sales: "",
+    temperature: 0,
+    stock_thresholds: 0,
+  } as ITableState;
+  
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };

@@ -1,15 +1,29 @@
 {
   "dashboard": [
     {
-      "id": "1",
-      "uptime": "2",
-      "current_sales": "Jon12",
-      "temperature": "351",
-      "stock_thresholds": "32"
+      "id": "1708265763796",
+      "uptime": "25",
+      "current_sales": "22",
+      "temperature": "20",
+      "stock_thresholds": 0
     },
     {
-      "id": "1708235825990",
-      "uptime": "2",
+      "id": "1708265961623",
+      "uptime": "22",
+      "current_sales": "111",
+      "temperature": 0,
+      "stock_thresholds": "1"
+    },
+    {
+      "id": "1708265965248",
+      "uptime": "213",
+      "current_sales": "333",
+      "temperature": 0,
+      "stock_thresholds": 0
+    },
+    {
+      "id": "1708265992566",
+      "uptime": "22",
       "current_sales": "1",
       "temperature": 0,
       "stock_thresholds": 0
