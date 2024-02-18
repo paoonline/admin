@@ -10,7 +10,9 @@ Second, install node module and run the development server:
 
 - npm install or yarn install
 
-- npm run dev oryarn dev
+- npm run dev or yarn dev
+
+- localhost:3000
 
 ## for unit test
 - npm run test
