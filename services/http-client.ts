@@ -41,6 +41,13 @@ class HttpClient {
       .put<R>(endpoint, body, options)
       .then((res) => res.data);
   }
+
+  async delete<T, R>(endpoint: string, options: AxiosRequestConfig = {}) {
+    return await this.initHttp()
+      .delete<R>(endpoint, options)
+      .then((res) => res.data);
+  }
+
 }
 
 export default HttpClient;

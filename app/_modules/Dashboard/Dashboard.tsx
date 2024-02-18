@@ -69,8 +69,18 @@ export default function DashboardModule() {
   const handleEditConfig = (data: ITableState, isError: boolean) => {
     dispatch(EDIT_TABLE(data));
     handleClearEditData();
-    if(isError) {
-      handleOpenStatusErrorModal(true)
+    if (isError) {
+      handleOpenStatusErrorModal(true);
+    } else {
+      handleOpenStatusModal(true);
+    }
+  };
+
+  const handleDeleteConfig = (data: ITableState[], isError?: boolean) => {
+    dispatch(SET_TABLE(data));
+    handleClearEditData();
+    if (isError) {
+      handleOpenStatusErrorModal(true);
     } else {
       handleOpenStatusModal(true);
     }
@@ -83,7 +93,7 @@ export default function DashboardModule() {
         dispatch(SET_TABLE(res));
       });
     } catch (error) {
-      handleOpenStatusErrorModal(true)
+      handleOpenStatusErrorModal(true);
     }
     setIsLoading(false);
   }, []);
@@ -116,7 +126,11 @@ export default function DashboardModule() {
         <DashboardTable onEdit={handleEditData} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Configuration form={editData} onEdit={handleEditConfig} />
+        <Configuration
+          form={editData}
+          onEdit={handleEditConfig}
+          onDelete={handleDeleteConfig}
+        />
       </CustomTabPanel>
 
       <SuccessSnackbar

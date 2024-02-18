@@ -1,16 +1,22 @@
 import { Loading } from "@/app/_components/Loading/Loading";
+import { selectTable } from "@/features/table";
 import { ITableState } from "@/models/table.type";
 import ApiClient from "@/services/api-client";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import DeleteDialog from "../DeleteDialog/DeleteDialog";
 
 export default function Configuration({
   onEdit,
   form,
+  onDelete,
 }: {
   form?: ITableState;
   onEdit(data: ITableState, isError?: boolean): void;
+  onDelete(data: ITableState[], isError?: boolean): void;
 }) {
   const {
     register,
@@ -21,6 +27,9 @@ export default function Configuration({
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const apiClient = new ApiClient();
+  const tableSelector = useSelector(selectTable);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const onSubmit = handleSubmit((data) => {
     setIsLoading(true);
     try {
@@ -32,11 +41,41 @@ export default function Configuration({
       onEdit(data, true);
       setIsLoading(false);
     }
-   
   });
+
+  const handleDelete = (open: boolean) => {
+    handleOpenDeleteModal(true);
+  };
+
+  const handleOnDelete = () => {
+    setIsLoading(true);
+    try {
+      apiClient.SERVICES.DELETE_DASHBOARD({ id: form?.id || "" }).then(() => {
+        const newTableSelector = tableSelector.filter(
+          (data) => form?.id !== data?.id
+        );
+        onDelete(newTableSelector);
+        setIsLoading(false);
+        handleDelete(false);
+      });
+    } catch (error) {
+      onDelete([], true);
+      setIsLoading(false);
+      handleDelete(false);
+    }
+  };
+
+  const handleOpenDeleteModal = (open: boolean) => {
+    setOpenDeleteModal(open);
+  };
 
   return (
     <form onSubmit={onSubmit}>
+      <DeleteDialog
+        open={openDeleteModal}
+        onClose={() => handleOpenDeleteModal(false)}
+        onConfirm={handleOnDelete}
+      />
       {isLoading ? (
         <Loading />
       ) : (
@@ -67,7 +106,21 @@ export default function Configuration({
                 />
               </Box>
             ))}
-          <Box mt={2} justifyContent={"flex-end"} sx={{ display: "flex" }}>
+          <Box
+            mt={2}
+            justifyContent={"flex-end"}
+            sx={{ display: "flex" }}
+            gap={4}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => handleDelete(true)}
+              startIcon={<DeleteIcon />}
+              color="warning"
+            >
+              Delete
+            </Button>
+
             <Button type="submit" variant="outlined">
               Submit
             </Button>
