@@ -16,7 +16,7 @@ class ApiClient extends HttpClient {
 
       CREATE_DASHBOARD: (req: ITableState) =>
         this.post<ITableState, ITableState[]>(
-          API_CONTEXT.DASHBOARD + "/" + req.id,
+          API_CONTEXT.DASHBOARD,
           req
         ),
 

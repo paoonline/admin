@@ -3,17 +3,17 @@ import { ITableState } from "@/models/table.type";
 import { searchArray } from "@/utils";
 import CreateIcon from "@mui/icons-material/Create";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Box, TextField, debounce } from "@mui/material";
+import { Box, Button, TextField, debounce } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { IDataTableProps } from "./DataTable.type";
 
-export default function DataTable({ onEdit }: IDataTableProps) {
+export default function DataTable({ onEdit,onCreate  }: IDataTableProps) {
   const tableSelector = useSelector(selectTable);
   const [tableData, setTableData] = useState<ITableState[]>([]);
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ID", width: 130 },
     { field: "uptime", headerName: "Uptime", width: 130 },
     { field: "current_sales", headerName: "Current sales", width: 130 },
     { field: "temperature", headerName: "Temperature", width: 130 },
@@ -46,8 +46,8 @@ export default function DataTable({ onEdit }: IDataTableProps) {
     alert("Alert");
   };
 
-  const handleManageConfig = (data:ITableState) => {
-    onEdit(data)
+  const handleManageConfig = (data: ITableState) => {
+    onEdit(data);
   };
 
   const handleSearch = (text: string) => {
@@ -79,6 +79,14 @@ export default function DataTable({ onEdit }: IDataTableProps) {
           variant="outlined"
           onChange={(e) => debouncedOnChange(e.target.value)}
         />
+      </Box>
+      <Box
+        mt={2}
+        mb={2}
+        className="w-full"
+        sx={{ display: "flex", justifyContent: "flex-end" }}
+      >
+        <Button variant="outlined" onClick={onCreate}>Create</Button>
       </Box>
 
       <DataGrid

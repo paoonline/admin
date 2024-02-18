@@ -3,13 +3,13 @@
 import { Loading } from "@/app/_components/Loading/Loading";
 import ErrorSnackbar from "@/app/_components/Snackbar/Error";
 import SuccessSnackbar from "@/app/_components/Snackbar/Success";
-import { EDIT_TABLE, SET_TABLE } from "@/features/table";
+import { EDIT_TABLE, SET_TABLE, selectTable } from "@/features/table";
 import { ITableState } from "@/models/table.type";
 import ApiClient from "@/services/api-client";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Configuration from "../Configuration/Configuration";
 import DashboardTable from "../DataTable/DataTable";
 
@@ -35,10 +35,20 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+const createObjectInit = {
+  id: new Date().getTime().toString(),
+  uptime: "",
+  current_sales: "",
+  temperature: 0,
+  stock_thresholds: 0,
+} as ITableState;
+
 export default function DashboardModule() {
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
   const [editData, setEditData] = useState<ITableState>();
+  const [isCreate, setIsCreate] = useState<boolean>(false);
+  const tableSelector = useSelector(selectTable);
   const [openStatusModal, setOpenStatusModal] = useState(false);
   const [openStatusErrorModal, setOpenStatusErrorModal] = useState(false);
   const apiClient = new ApiClient();
@@ -56,6 +66,7 @@ export default function DashboardModule() {
   const handleClearEditData = () => {
     setValue(0);
     setEditData(undefined);
+    setIsCreate(false);
   };
 
   const handleOpenStatusModal = (open: boolean) => {
@@ -66,8 +77,17 @@ export default function DashboardModule() {
     setOpenStatusErrorModal(open);
   };
 
-  const handleEditConfig = (data: ITableState, isError: boolean) => {
-    dispatch(EDIT_TABLE(data));
+  const handleCreateEditConfig = (data: ITableState, isError: boolean) => {
+
+    if(isCreate) {
+      const newTableSelector = [...tableSelector]
+      newTableSelector.push(data)
+      dispatch(SET_TABLE(newTableSelector));
+
+    } else {
+      dispatch(EDIT_TABLE(data));
+    }
+  
     handleClearEditData();
     if (isError) {
       handleOpenStatusErrorModal(true);
@@ -84,6 +104,11 @@ export default function DashboardModule() {
     } else {
       handleOpenStatusModal(true);
     }
+  };
+
+  const handleIsCreate = (open: boolean) => {
+    setIsCreate(open);
+    setValue(1);
   };
 
   // init call
@@ -108,7 +133,7 @@ export default function DashboardModule() {
           aria-label="basic tabs example"
         >
           <Tab label={<span>Dashboard</span>} />
-          {!!editData && (
+          {(!!editData || isCreate) && (
             <Tab
               label={
                 <Box flexDirection={"row"}>
@@ -123,12 +148,17 @@ export default function DashboardModule() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <DashboardTable onEdit={handleEditData} />
+        {/* // callback edit or create action */}
+        <DashboardTable
+          onEdit={handleEditData}
+          onCreate={() => handleIsCreate(true)}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <Configuration
-          form={editData}
-          onEdit={handleEditConfig}
+          isCreate={isCreate}
+          form={isCreate ? createObjectInit : editData}
+          onCreateEdit={handleCreateEditConfig}
           onDelete={handleDeleteConfig}
         />
       </CustomTabPanel>

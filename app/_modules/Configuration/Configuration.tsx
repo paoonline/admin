@@ -10,12 +10,14 @@ import { useSelector } from "react-redux";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 
 export default function Configuration({
-  onEdit,
+  onCreateEdit,
   form,
+  isCreate,
   onDelete,
 }: {
+  isCreate?: boolean;
   form?: ITableState;
-  onEdit(data: ITableState, isError?: boolean): void;
+  onCreateEdit(data: ITableState, isError?: boolean): void;
   onDelete(data: ITableState[], isError?: boolean): void;
 }) {
   const {
@@ -25,6 +27,7 @@ export default function Configuration({
   } = useForm<ITableState>({
     defaultValues: form,
   });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const apiClient = new ApiClient();
   const tableSelector = useSelector(selectTable);
@@ -32,19 +35,22 @@ export default function Configuration({
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const onSubmit = handleSubmit((data) => {
     setIsLoading(true);
+
     try {
-      apiClient.SERVICES.UPDATE_DASHBOARD(data).then((res) => {
-        onEdit(data);
+      apiClient.SERVICES[isCreate ? "CREATE_DASHBOARD" : "UPDATE_DASHBOARD"](
+        data
+      ).then(() => {
+        onCreateEdit(data);
         setIsLoading(false);
       });
     } catch (error) {
-      onEdit(data, true);
-      setIsLoading(false);
+      onCreateEdit(data, true);
     }
+    setIsLoading(false);
   });
 
   const handleDelete = (open: boolean) => {
-    handleOpenDeleteModal(true);
+    handleOpenDeleteModal(open);
   };
 
   const handleOnDelete = () => {
@@ -106,25 +112,29 @@ export default function Configuration({
                 />
               </Box>
             ))}
-          <Box
-            mt={2}
-            justifyContent={"flex-end"}
-            sx={{ display: "flex" }}
-            gap={4}
-          >
-            <Button
-              variant="outlined"
-              onClick={() => handleDelete(true)}
-              startIcon={<DeleteIcon />}
-              color="warning"
+          {
+            <Box
+              mt={2}
+              justifyContent={"flex-end"}
+              sx={{ display: "flex" }}
+              gap={4}
             >
-              Delete
-            </Button>
+              {!isCreate && (
+                <Button
+                  variant="outlined"
+                  onClick={() => handleDelete(true)}
+                  startIcon={<DeleteIcon />}
+                  color="warning"
+                >
+                  Delete
+                </Button>
+              )}
 
-            <Button type="submit" variant="outlined">
-              Submit
-            </Button>
-          </Box>
+              <Button type="submit" variant="outlined">
+                Submit
+              </Button>
+            </Box>
+          }
         </React.Fragment>
       )}
     </form>
