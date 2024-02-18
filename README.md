@@ -9,11 +9,11 @@ ip from localhost
 Second, install node module and run the development server:
 
 - npm install
-# or
+or
 - yarn install
 
 - npm run dev
-# or
+or
 - yarn dev
 
 for unit test
