@@ -70,8 +70,9 @@ export default function DataTable({ onEdit }: IDataTableProps) {
       <Box
         mb={2}
         className="w-full"
-        sx={{ display: "flex", justifyContent: "flex-end" }}
+        sx={{ display: "flex", justifyContent: "space-between" }}
       >
+        <h5>Machine display</h5>
         <TextField
           id="search-table"
           label="Search"

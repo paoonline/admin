@@ -8,7 +8,7 @@ class ApiClient extends HttpClient {
       //get
       GET_DASHBOARD: () => this.get<ITableState[]>(API_CONTEXT.GET_DASHBOARD),
 
-      PUT_DASHBOARD: (req: ITableState) =>
+      UPDATE_DASHBOARD: (req: ITableState) =>
         this.put<{ id: string }, ITableState[]>(
           API_CONTEXT.GET_DASHBOARD + "/" + req.id,
           req

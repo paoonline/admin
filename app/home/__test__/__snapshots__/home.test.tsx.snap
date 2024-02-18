@@ -1,6 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DashboardModule render 1`] = `
+exports[`home layout render 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-v3b02c"
+  >
+    <div />
+  </div>
+</div>
+`;
+
+exports[`home render 1`] = `
 <div>
   <div
     class="MuiBox-root css-8atqhb"

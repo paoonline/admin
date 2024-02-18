@@ -1,11 +1,11 @@
-import { render } from "@testing-library/react"
+import { render } from "@testing-library/react";
 
-import { Providers } from "@/store/provider"
-import DashboardModule from "../Dashboard"
+import { Providers } from "@/store/provider";
+import DashboardModule from "../Dashboard";
 
-describe('DashboardModule', () => {
-   it('test', () => {
-    const {container} = render(<DashboardModule/>, {wrapper: Providers})
-    expect(container).toMatchSnapshot()
-   })
-})
+describe("DashboardModule", () => {
+  it("render", () => {
+    const { container } = render(<DashboardModule />, { wrapper: Providers });
+    expect(container).toMatchSnapshot();
+  });
+});
